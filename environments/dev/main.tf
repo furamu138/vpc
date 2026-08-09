@@ -8,13 +8,24 @@ module "ec2" {
   subnet_id = module.vpc.public_subnet_ids[0]
 }
 
+# module "alb" {
+#   source                     = "../../modules/alb"
+#   subnet_ids                 = module.vpc.public_subnet_ids
+#   instance_id                = module.ec2.instance_id
+#   instance_security_group_id = module.ec2.instance_security_group_id
+
+#   certificate_arn = module.acm.certificate_arn
+# }
+
 module "alb" {
-  source                     = "../../modules/alb"
+  source = "../../modules/alb"
+
+  vpc_id = module.vpc.vpc_id
+
   subnet_ids                 = module.vpc.public_subnet_ids
   instance_id                = module.ec2.instance_id
   instance_security_group_id = module.ec2.instance_security_group_id
-
-  certificate_arn = module.acm.certificate_arn
+  certificate_arn            = module.acm.certificate_arn
 }
 
 module "route53" {
