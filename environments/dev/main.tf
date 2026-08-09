@@ -3,9 +3,9 @@ module "vpc" {
 }
 
 module "ec2" {
-  source         = "../../modules/ec2"
+  source    = "../../modules/ec2"
   allow_ssh = true
-  subnet_id      = module.vpc.public_subnet_ids[0]
+  subnet_id = module.vpc.public_subnet_ids[0]
 }
 
 module "alb" {
@@ -27,4 +27,11 @@ module "route53" {
 module "acm" {
   source      = "../../modules/acm"
   domain_name = "ruriha-rura.com"
+}
+
+module "acm_validation" {
+  source                    = "../../modules/acm_validation"
+  domain_name               = "ruriha-rura.com"
+  certificate_arn           = module.acm.certificate_arn
+  domain_validation_options = module.acm.domain_validation_options
 }
