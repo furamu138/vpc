@@ -3,9 +3,10 @@ module "vpc" {
 }
 
 module "ec2" {
-  source    = "../../modules/ec2"
-  allow_ssh = true
-  subnet_id = module.vpc.public_subnet_ids[0]
+  source         = "../../modules/ec2"
+  allow_ssh      = true
+  subnet_ids     = module.vpc.public_subnet_ids
+  instance_count = 2
 }
 
 module "alb" {
@@ -14,7 +15,7 @@ module "alb" {
   vpc_id = module.vpc.vpc_id
 
   subnet_ids                 = module.vpc.public_subnet_ids
-  instance_id                = module.ec2.instance_id
+  instance_ids               = module.ec2.instance_ids
   instance_security_group_id = module.ec2.instance_security_group_id
   certificate_arn            = module.acm.certificate_arn
 }

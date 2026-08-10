@@ -1,5 +1,5 @@
-output "instance_id" {
-  value = aws_instance.this.id
+output "instance_ids" {
+  value = aws_instance.this[*].id
 }
 
 output "instance_security_group_id" {
