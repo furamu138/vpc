@@ -62,7 +62,7 @@ resource "aws_route" "private" {
 
   nat_gateway_id = var.nat_gateway_count == 1 ? (
     aws_nat_gateway.this["ap-northeast-1a"].id
-  ) : (
+    ) : (
     aws_nat_gateway.this[each.key].id
   )
 }
@@ -74,7 +74,7 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_route_table_association" "private" {
-  for_each = aws_subnet.private
+  for_each       = aws_subnet.private
   subnet_id      = each.value.id
   route_table_id = aws_route_table.private[each.key].id
 }
