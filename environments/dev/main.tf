@@ -1,5 +1,6 @@
 module "vpc" {
   source = "../../modules/vpc"
+  # nat_gateway_count = 3
 }
 
 module "ec2" {
