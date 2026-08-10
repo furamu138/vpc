@@ -4,12 +4,6 @@ resource "aws_lb" "this" {
   subnets            = var.subnet_ids
 }
 
-# resource "aws_lb_target_group" "this" {
-#   port     = 80
-#   protocol = "HTTP"
-#   vpc_id   = data.aws_subnet.this.vpc_id
-# }
-
 resource "aws_lb_target_group" "this" {
   port     = 80
   protocol = "HTTP"
@@ -47,22 +41,9 @@ resource "aws_lb_target_group_attachment" "this" {
   target_id        = var.instance_id
 }
 
-# resource "aws_vpc" "main" {
-#   cidr_block = "10.0.0.0/16"
-# }
-
 resource "random_id" "this" {
   byte_length = 8
 }
-
-# data "aws_subnet" "this" {
-#   id = var.subnet_ids[0]
-# }
-
-# resource "aws_security_group" "this" {
-#   vpc_id = data.aws_subnet.this.vpc_id
-#   name   = "udemy-terraform-alb-sg-${random_id.this.hex}"
-# }
 
 resource "aws_security_group" "this" {
   vpc_id = var.vpc_id
