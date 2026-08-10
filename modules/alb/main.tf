@@ -38,9 +38,9 @@ resource "aws_lb_listener" "https" {
 
 resource "aws_lb_target_group_attachment" "this" {
   for_each = {
-  for index, instance_id in var.instance_ids :
-  index => instance_id
-}
+    for index, instance_id in var.instance_ids :
+    index => instance_id
+  }
 
   target_group_arn = aws_lb_target_group.this.arn
   target_id        = each.value
