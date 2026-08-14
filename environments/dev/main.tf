@@ -21,6 +21,18 @@ module "alb" {
   certificate_arn            = module.acm.certificate_arn
 }
 
+module "rds" {
+  source = "../../modules/rds"
+
+  vpc_id                = module.vpc.vpc_id
+  ec2_security_group_id = module.ec2.instance_security_group_id
+
+  db_subnet_group_name = module.vpc.db_subnet_group_name
+
+  username = "admin"
+  password = var.db_password
+}
+
 module "route53" {
   source       = "../../modules/route53"
   domain_name  = "ruriha-rura.com"
