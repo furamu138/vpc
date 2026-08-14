@@ -10,9 +10,9 @@ locals {
     "ap-northeast-1d" = "10.0.12.0/24"
   }
   db_subnet_args = {
-  "ap-northeast-1a" = "10.0.20.0/24"
-  "ap-northeast-1c" = "10.0.21.0/24"
-  "ap-northeast-1d" = "10.0.22.0/24"
+    "ap-northeast-1a" = "10.0.20.0/24"
+    "ap-northeast-1c" = "10.0.21.0/24"
+    "ap-northeast-1d" = "10.0.22.0/24"
   }
 }
 
