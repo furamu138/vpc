@@ -9,6 +9,11 @@ locals {
     "ap-northeast-1c" = "10.0.11.0/24"
     "ap-northeast-1d" = "10.0.12.0/24"
   }
+  db_subnet_args = {
+    "ap-northeast-1a" = "10.0.20.0/24"
+    "ap-northeast-1c" = "10.0.21.0/24"
+    "ap-northeast-1d" = "10.0.22.0/24"
+  }
 }
 
 resource "aws_vpc" "this" {
@@ -35,6 +40,14 @@ resource "aws_subnet" "private" {
   availability_zone = each.key
 }
 
+resource "aws_subnet" "db" {
+  for_each = local.db_subnet_args
+
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = each.value
+  availability_zone = each.key
+}
+
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
 }
@@ -50,6 +63,12 @@ resource "aws_route_table" "public" {
 
 resource "aws_route_table" "private" {
   for_each = aws_subnet.private
+
+  vpc_id = aws_vpc.this.id
+}
+
+resource "aws_route_table" "db" {
+  for_each = aws_subnet.db
 
   vpc_id = aws_vpc.this.id
 }
@@ -77,6 +96,22 @@ resource "aws_route_table_association" "private" {
   for_each       = aws_subnet.private
   subnet_id      = each.value.id
   route_table_id = aws_route_table.private[each.key].id
+}
+
+resource "aws_route_table_association" "db" {
+  for_each = aws_subnet.db
+
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.db[each.key].id
+}
+
+resource "aws_db_subnet_group" "this" {
+  name       = "udemy-terraform-db-subnet-group"
+  subnet_ids = [for subnet in aws_subnet.db : subnet.id]
+
+  tags = {
+    Name = "udemy-terraform-db-subnet-group"
+  }
 }
 
 resource "aws_eip" "nat" {
