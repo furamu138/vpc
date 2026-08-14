@@ -10,7 +10,7 @@ variable "instance_ids" {
   type = list(string)
 }
 
-variable "instance_security_group_id" {
+variable "security_group_id" {
   type = string
 }
 
