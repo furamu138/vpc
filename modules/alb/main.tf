@@ -1,6 +1,6 @@
 resource "aws_lb" "this" {
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.this.id]
+  security_groups    = [var.security_group_id]
   subnets            = var.subnet_ids
 }
 
@@ -44,49 +44,4 @@ resource "aws_lb_target_group_attachment" "this" {
 
   target_group_arn = aws_lb_target_group.this.arn
   target_id        = each.value
-}
-
-resource "random_id" "this" {
-  byte_length = 8
-}
-
-resource "aws_security_group" "this" {
-  vpc_id = var.vpc_id
-  name   = "udemy-terraform-alb-sg-${random_id.this.hex}"
-}
-
-resource "aws_security_group_rule" "http" {
-  type              = "ingress"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.this.id
-}
-
-resource "aws_security_group_rule" "https" {
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.this.id
-}
-
-resource "aws_security_group_rule" "egress" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.this.id
-}
-
-resource "aws_security_group_rule" "alb_to_enter_instance" {
-  type                     = "ingress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.this.id
-  security_group_id        = var.instance_security_group_id
 }
