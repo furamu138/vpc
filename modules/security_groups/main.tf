@@ -69,17 +69,6 @@ resource "aws_security_group_rule" "ec2_http_from_alb" {
   security_group_id        = aws_security_group.ec2.id
 }
 
-resource "aws_security_group_rule" "ec2_ssh_ingress" {
-  count = var.allow_ssh ? 1 : 0
-
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.ec2.id
-}
-
 resource "aws_security_group_rule" "ec2_egress" {
   type              = "egress"
   from_port         = 0
