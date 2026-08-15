@@ -1,17 +1,25 @@
+locals {
+  name_prefix = "${var.project_name}-${var.environment}"
+}
+
 module "vpc" {
   source = "../../modules/vpc"
+
+  name_prefix = local.name_prefix
   # nat_gateway_count = 3
 }
 
 module "security_groups" {
   source = "../../modules/security_groups"
 
-  vpc_id    = module.vpc.vpc_id
-  allow_ssh = true
+  name_prefix = local.name_prefix
+  vpc_id      = module.vpc.vpc_id
+  allow_ssh   = true
 }
 
 module "ec2" {
   source            = "../../modules/ec2"
+  name_prefix       = local.name_prefix
   subnet_ids        = module.vpc.public_subnet_ids
   security_group_id = module.security_groups.ec2_security_group_id
   instance_count    = 2
@@ -20,7 +28,8 @@ module "ec2" {
 module "alb" {
   source = "../../modules/alb"
 
-  vpc_id = module.vpc.vpc_id
+  name_prefix = local.name_prefix
+  vpc_id      = module.vpc.vpc_id
 
   subnet_ids        = module.vpc.public_subnet_ids
   instance_ids      = module.ec2.instance_ids
@@ -31,6 +40,7 @@ module "alb" {
 module "rds" {
   source = "../../modules/rds"
 
+  name_prefix       = local.name_prefix
   db_subnet_ids     = module.vpc.db_subnet_ids
   security_group_id = module.security_groups.rds_security_group_id
 
@@ -47,6 +57,7 @@ module "route53" {
 
 module "acm" {
   source      = "../../modules/acm"
+  name_prefix = local.name_prefix
   domain_name = "ruriha-rura.com"
 }
 

@@ -1,3 +1,7 @@
+variable "name_prefix" {
+  type = string
+}
+
 variable "nat_gateway_count" {
   type    = number
   default = 1

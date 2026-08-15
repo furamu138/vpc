@@ -1,8 +1,7 @@
 terraform {
   backend "s3" {
-    bucket = "udemy-terraform-s3-keigo-takahashi"
+    bucket = "myamae-terraform-state-keigo-takahashi"
     key    = "dev/terraform.tfstate"
     region = "ap-northeast-1"
   }
 }
-
