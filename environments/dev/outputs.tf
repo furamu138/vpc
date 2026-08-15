@@ -1,3 +1,3 @@
 output "url" {
-  value = "http://${module.route53.domain_name}"
+  value = "https://${module.route53.domain_name}"
 }
