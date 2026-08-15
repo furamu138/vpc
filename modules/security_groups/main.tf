@@ -7,29 +7,29 @@ resource "random_id" "ec2" {
 }
 
 resource "aws_security_group" "alb" {
-  name   = "udemy-terraform-alb-sg-${random_id.alb.hex}"
+  name   = "${var.name_prefix}-alb-sg-${random_id.alb.hex}"
   vpc_id = var.vpc_id
 
   tags = {
-    Name = "udemy-terraform-alb-sg"
+    Name = "${var.name_prefix}-alb-sg"
   }
 }
 
 resource "aws_security_group" "ec2" {
-  name   = "udemy-terraform-ec2-sg-${random_id.ec2.hex}"
+  name   = "${var.name_prefix}-ec2-sg-${random_id.ec2.hex}"
   vpc_id = var.vpc_id
 
   tags = {
-    Name = "udemy-terraform-ec2-sg"
+    Name = "${var.name_prefix}-ec2-sg"
   }
 }
 
 resource "aws_security_group" "rds" {
-  name   = "udemy-terraform-rds-sg"
+  name   = "${var.name_prefix}-rds-sg"
   vpc_id = var.vpc_id
 
   tags = {
-    Name = "udemy-terraform-rds-sg"
+    Name = "${var.name_prefix}-rds-sg"
   }
 }
 

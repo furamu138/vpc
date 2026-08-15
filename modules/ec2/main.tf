@@ -9,6 +9,6 @@ resource "aws_instance" "this" {
   user_data_replace_on_change = true
 
   tags = {
-    Name = "udemy-terraform-ec2-${count.index + 1}"
+    Name = "${var.name_prefix}-ec2-${count.index + 1}"
   }
 }

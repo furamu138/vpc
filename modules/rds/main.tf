@@ -1,14 +1,18 @@
 resource "aws_db_subnet_group" "this" {
-  name       = "udemy-terraform-db-subnet-group"
+  name       = "${var.name_prefix}-db-subnet-group"
   subnet_ids = var.db_subnet_ids
 
   tags = {
-    Name = "udemy-terraform-db-subnet-group"
+    Name = "${var.name_prefix}-db-subnet-group"
   }
 }
 
 resource "aws_db_instance" "this" {
-  identifier = "udemy-terraform-rds"
+  identifier = "${var.name_prefix}-rds"
+
+  tags = {
+    Name = "${var.name_prefix}-rds"
+  }
 
   engine         = "mysql"
   instance_class = "db.t3.micro"

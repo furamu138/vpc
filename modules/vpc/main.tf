@@ -20,7 +20,7 @@ resource "aws_vpc" "this" {
   cidr_block = "10.0.0.0/16"
 
   tags = {
-    Name = "udemy-terraform-vpc"
+    Name = "${var.name_prefix}-vpc"
   }
 }
 
@@ -30,6 +30,10 @@ resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.this.id
   cidr_block        = each.value
   availability_zone = each.key
+
+  tags = {
+    Name = "${var.name_prefix}-public-subnet-${each.key}"
+  }
 }
 
 resource "aws_subnet" "private" {
@@ -38,6 +42,10 @@ resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.this.id
   cidr_block        = each.value
   availability_zone = each.key
+
+  tags = {
+    Name = "${var.name_prefix}-private-subnet-${each.key}"
+  }
 }
 
 resource "aws_subnet" "db" {
@@ -46,10 +54,18 @@ resource "aws_subnet" "db" {
   vpc_id            = aws_vpc.this.id
   cidr_block        = each.value
   availability_zone = each.key
+
+  tags = {
+    Name = "${var.name_prefix}-db-subnet-${each.key}"
+  }
 }
 
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
+
+  tags = {
+    Name = "${var.name_prefix}-igw"
+  }
 }
 
 resource "aws_route_table" "public" {
@@ -59,18 +75,30 @@ resource "aws_route_table" "public" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.this.id
   }
+
+  tags = {
+    Name = "${var.name_prefix}-public-route-table"
+  }
 }
 
 resource "aws_route_table" "private" {
   for_each = aws_subnet.private
 
   vpc_id = aws_vpc.this.id
+
+  tags = {
+    Name = "${var.name_prefix}-private-route-table-${each.key}"
+  }
 }
 
 resource "aws_route_table" "db" {
   for_each = aws_subnet.db
 
   vpc_id = aws_vpc.this.id
+
+  tags = {
+    Name = "${var.name_prefix}-db-route-table-${each.key}"
+  }
 }
 
 resource "aws_route" "private" {
@@ -109,6 +137,10 @@ resource "aws_eip" "nat" {
   for_each = var.nat_gateway_count == 1 ? {
     "ap-northeast-1a" = aws_subnet.public["ap-northeast-1a"]
   } : aws_subnet.public
+
+  tags = {
+    Name = "${var.name_prefix}-nat-eip-${each.key}"
+  }
 }
 
 resource "aws_nat_gateway" "this" {
@@ -118,6 +150,10 @@ resource "aws_nat_gateway" "this" {
 
   allocation_id = aws_eip.nat[each.key].id
   subnet_id     = each.value.id
+
+  tags = {
+    Name = "${var.name_prefix}-nat-gateway-${each.key}"
+  }
 
   depends_on = [
     aws_internet_gateway.this
