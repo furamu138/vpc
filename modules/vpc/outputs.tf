@@ -4,8 +4,10 @@ output "public_subnet_ids" {
   ]
 }
 
-output "db_subnet_group_name" {
-  value = aws_db_subnet_group.this.name
+output "db_subnet_ids" {
+  value = [
+    for subnet in aws_subnet.db : subnet.id
+  ]
 }
 
 output "vpc_id" {
