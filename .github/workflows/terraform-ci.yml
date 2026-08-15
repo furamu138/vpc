@@ -1,0 +1,52 @@
+name: Terraform CI
+
+on:
+  pull_request:
+    paths:
+      - "environments/**"
+      - "modules/**"
+      - ".github/workflows/terraform-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "environments/**"
+      - "modules/**"
+      - ".github/workflows/terraform-ci.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: terraform-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-dev:
+    name: Validate dev
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      TF_IN_AUTOMATION: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: 1.3.8
+          terraform_wrapper: false
+
+      - name: Check formatting
+        run: terraform fmt -check -recursive
+
+      - name: Initialize dev configuration
+        working-directory: environments/dev
+        run: terraform init -backend=false -input=false
+
+      - name: Validate dev configuration
+        working-directory: environments/dev
+        run: terraform validate -no-color
