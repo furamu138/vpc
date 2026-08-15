@@ -25,7 +25,7 @@ module "alb" {
   subnet_ids        = module.vpc.public_subnet_ids
   instance_ids      = module.ec2.instance_ids
   security_group_id = module.security_groups.alb_security_group_id
-  certificate_arn   = module.acm.certificate_arn
+  certificate_arn   = module.acm_validation.certificate_arn
 }
 
 module "rds" {
