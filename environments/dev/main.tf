@@ -14,7 +14,6 @@ module "security_groups" {
 
   name_prefix = local.name_prefix
   vpc_id      = module.vpc.vpc_id
-  allow_ssh   = true
 }
 
 module "ec2" {

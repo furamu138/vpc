@@ -39,11 +39,6 @@ moved {
 }
 
 moved {
-  from = module.ec2.aws_security_group_rule.ssh
-  to   = module.security_groups.aws_security_group_rule.ec2_ssh_ingress
-}
-
-moved {
   from = module.ec2.aws_security_group_rule.egress
   to   = module.security_groups.aws_security_group_rule.ec2_egress
 }
