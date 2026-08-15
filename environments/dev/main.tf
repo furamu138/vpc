@@ -31,8 +31,8 @@ module "alb" {
 module "rds" {
   source = "../../modules/rds"
 
-  db_subnet_group_name = module.vpc.db_subnet_group_name
-  security_group_id    = module.security_groups.rds_security_group_id
+  db_subnet_ids     = module.vpc.db_subnet_ids
+  security_group_id = module.security_groups.rds_security_group_id
 
   username = "admin"
   password = var.db_password

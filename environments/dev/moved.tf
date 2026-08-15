@@ -52,3 +52,8 @@ moved {
   from = module.rds.aws_security_group.this
   to   = module.security_groups.aws_security_group.rds
 }
+
+moved {
+  from = module.vpc.aws_db_subnet_group.this
+  to   = module.rds.aws_db_subnet_group.this
+}

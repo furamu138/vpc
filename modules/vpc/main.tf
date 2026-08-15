@@ -105,15 +105,6 @@ resource "aws_route_table_association" "db" {
   route_table_id = aws_route_table.db[each.key].id
 }
 
-resource "aws_db_subnet_group" "this" {
-  name       = "udemy-terraform-db-subnet-group"
-  subnet_ids = [for subnet in aws_subnet.db : subnet.id]
-
-  tags = {
-    Name = "udemy-terraform-db-subnet-group"
-  }
-}
-
 resource "aws_eip" "nat" {
   for_each = var.nat_gateway_count == 1 ? {
     "ap-northeast-1a" = aws_subnet.public["ap-northeast-1a"]
