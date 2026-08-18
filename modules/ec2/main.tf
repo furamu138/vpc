@@ -4,7 +4,7 @@ resource "aws_instance" "this" {
   instance_type               = "t2.micro"
   subnet_id                   = var.subnet_ids[count.index]
   vpc_security_group_ids      = [var.security_group_id]
-  associate_public_ip_address = true
+  associate_public_ip_address = false
   user_data                   = file("${path.module}/user_data.sh")
   user_data_replace_on_change = true
 

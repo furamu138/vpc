@@ -19,7 +19,7 @@ module "security_groups" {
 module "ec2" {
   source            = "../../modules/ec2"
   name_prefix       = local.name_prefix
-  subnet_ids        = module.vpc.public_subnet_ids
+  subnet_ids        = module.vpc.private_subnet_ids
   security_group_id = module.security_groups.ec2_security_group_id
   instance_count    = 2
 }
