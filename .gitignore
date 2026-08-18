@@ -6,5 +6,3 @@
 # Sensitive files
 *.tfvars
 *.tfvars.json
-
-*.terraform.lock.hcl
