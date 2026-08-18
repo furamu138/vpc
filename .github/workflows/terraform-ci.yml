@@ -50,3 +50,29 @@ jobs:
       - name: Validate dev configuration
         working-directory: environments/dev
         run: terraform validate -no-color
+
+  validate-dev-observability:
+    name: Validate dev observability
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      TF_IN_AUTOMATION: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: 1.3.8
+          terraform_wrapper: false
+
+      - name: Initialize dev observability configuration
+        working-directory: environments/dev/observability
+        run: terraform init -backend=false -input=false
+
+      - name: Validate dev observability configuration
+        working-directory: environments/dev/observability
+        run: terraform validate -no-color
